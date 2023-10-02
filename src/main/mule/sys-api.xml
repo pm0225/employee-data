@@ -37,7 +37,7 @@ output application/json
 				<ee:set-variable variableName="entreis" ><![CDATA[%dw 2.0
 output application/json
 ---
-{message:"payload"}]]></ee:set-variable>
+{messag:"payload"}]]></ee:set-variable>
 			
 </ee:variables>
 		</ee:transform>
