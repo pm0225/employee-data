@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="b68ce5c0-0944-4d60-af07-36bb1295f93f" >
+		<http:listener-connection host="0.0.0.0" port="8082" />
+	</http:listener-config>
+	<http:listener-config name="HTTP_Listener_config1" doc:name="HTTP Listener config" doc:id="f5940b20-d2a1-4f4a-804a-7757707a8614" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="system-apFlow" doc:id="321a1399-3141-4bf6-90ce-2e98443fd572" >
+		<http:listener doc:name="Listener" doc:id="2e09946c-b288-4aee-862b-8c27bddc11f7" path="/api/*" config-ref="HTTP_Listener_config"/>
+		<http:request method="GET" doc:name="Request" doc:id="a67ce741-b284-43da-a0e8-8dc9aca0cd78" url="https://catfact.ninja/fact"/>
+		<ee:transform doc:name="Transform Message" doc:id="39d66949-c843-4abc-b97e-169097781823">
+			<ee:message>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="facts" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	Tittle: "payload.fact",
+	string: "payload.length"
+}
+]]></ee:set-variable>
+			
+</ee:variables>
+		</ee:transform>
+		<http:request method="GET" doc:name="Request" doc:id="cf5031a3-266c-479a-aa63-5a1299d92c89" url="https://api.publicapis.org/entries"/>
+		<ee:transform doc:name="Transform Message" doc:id="42d7b544-f4f2-4018-99ce-1191ca6dc4eb" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="entreis" ><![CDATA[%dw 2.0
+output application/json
+---
+{message:"payload"}]]></ee:set-variable>
+			
+</ee:variables>
+		</ee:transform>
+		<ee:transform doc:name="Transform Message" doc:id="4d3b05c2-7638-481b-8ef7-d56ab36ad272" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+vars.facts ++ vars.entreis]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
