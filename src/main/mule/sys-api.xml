@@ -6,14 +6,12 @@
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="b68ce5c0-0944-4d60-af07-36bb1295f93f" >
-		<http:listener-connection host="0.0.0.0" port="8082" />
+		<http:listener-connection host="0.0.0.0" port="8080" />
 	</http:listener-config>
-	<http:listener-config name="HTTP_Listener_config1" doc:name="HTTP Listener config" doc:id="f5940b20-d2a1-4f4a-804a-7757707a8614" >
-		<http:listener-connection host="0.0.0.0" port="8081" />
-	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="54377a2e-2de7-4d15-bdf5-97acce0b9630" responseTimeout="120000" />
 	<flow name="system-apFlow" doc:id="321a1399-3141-4bf6-90ce-2e98443fd572" >
 		<http:listener doc:name="Listener" doc:id="2e09946c-b288-4aee-862b-8c27bddc11f7" path="/api/*" config-ref="HTTP_Listener_config"/>
-		<http:request method="GET" doc:name="Request" doc:id="a67ce741-b284-43da-a0e8-8dc9aca0cd78" url="https://catfact.ninja/fact"/>
+		<http:request method="GET" doc:name="Request" doc:id="a67ce741-b284-43da-a0e8-8dc9aca0cd78" url="https://catfact.ninja/fact" config-ref="HTTP_Request_configuration"/>
 		<ee:transform doc:name="Transform Message" doc:id="39d66949-c843-4abc-b97e-169097781823">
 			<ee:message>
 			</ee:message>
